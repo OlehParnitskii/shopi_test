@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Angelface';
+    src: url('Angelface.woff2') format('woff2'),
+         url('Angelface.woff') format('woff'),
+         url('Angelface.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}

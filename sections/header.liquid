@@ -1,0 +1,744 @@
+
+<header class="header">
+  <div class="header-top">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-12 col-sm-auto">
+          <div class="brand">
+            <div class="brand-title">Оберіть бренд:</div>
+            <div class="brand-list">
+              <ul>
+                {% for block in section.blocks limit: section.blocks.size %}
+                  {%- assign brand = collections[block.settings.brand] -%}
+                  {% if block.type == 'featured_collection' %}
+
+
+                <li><a href="{{ routes.root_url }}">{{  brand.title }}<img src="{{ brand.image | img_url: 'medium' }}" alt=""></a></li>
+                  {% endif %}
+                {% endfor %}
+                {% comment %}<li><a href="index.win.html">Win<img src="img/logo-win.svg" alt=""></a></li>{% endcomment %}
+                {% comment %}<li><a href="index.bretelle.html">Bretelle<img src="img/logo-bretelle.svg" alt=""></a></li>{% endcomment %}
+
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-auto">
+          <div class="header-user__panel d-flex align-items-center">
+            <div class="header-account">
+              <a href="" class="header-account__title" data-toggle="modal" data-target="#modal-login">
+                <span class="icon icon-i-user"></span>Аккаунт
+              </a>
+            </div>
+
+            <div class="header-wishlist">
+              <a href="/apps/advanced-wishlist" class="header-wishlist__title" >
+                <span class="icon icon-i-heart"></span>Улюблене <b>(0)</b>
+              </a>
+            </div>
+            <div class="header-basket" data-cart-count-bubble >
+              <a href="{{ routes.cart_url }}" class="header-basket__title">
+                <span class="icon icon-i-bag"></span>Кошик <b data-cart-count>({{ cart.item_count }})</b >
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-middle">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-auto">
+          <div class="d-flex align-items-center">
+            <div class="menu-toggle js-modal-menu-open">
+              <span class="icon icon-i-menu"></span>
+            </div>
+            <a href="stores.html" class="location"><span class="icon icon-i-location"></span>Адреси магазинів</a>
+            <div class="phone">
+
+
+              <div class="phone-title">
+                <a href="tel:{{ section.settings.phone_number1  }}">{{ section.settings.phone_number1 }}</a>
+                <div class="phone-arr">
+                  <span class="icon icon-i-arr-down"></span>
+                </div>
+              </div>
+
+              <div class="phone-list">
+                <ul>
+                  <li><a href="tel:{{ section.settings.phone_number2  }}">{{ section.settings.phone_number2 }}</a></li>
+                  <li><a href="tel:{{ section.settings.phone_number3  }}">{{ section.settings.phone_number3 }}</a></li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="logo">
+          <a href="index.html"><img src="img/logo-ajour.svg" alt=""></a>
+        </div>
+        <div class="col-auto">
+          <div class="header-settings__panel d-flex align-items-center">
+            <div class="currency">
+              <div class="currency-title">UAH</div>
+              <div class="currency-arr">
+                <span class="icon icon-i-arr-down"></span>
+              </div>
+              <div class="currency-list">
+                <ul>
+                  <li><a href="">USD</a></li>
+                  <li><a href="">EUR</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="lang">
+              <div class="lang-title">UA</div>
+              <div class="lang-arr">
+                <span class="icon icon-i-arr-down"></span>
+              </div>
+              <div class="lang-list">
+                <ul>
+                  <li><a href="">RU</a></li>
+                  <li><a href="">En</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <a href="search.html" class="search js-search">
+              <span class="icon icon-i-search"></span>Пошук
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-bottom">
+    <div class="container">
+      <!--			<div class="catalog-menu__toggle js-catalog-menu-toggle">-->
+      <!--				<div class="catalog-menu__toggle-title">Каталог товаров</div>-->
+      <!--				<div class="catalog-menu__toggle-arr">-->
+      <!--					<span class="icon icon-i-arr-down"></span>-->
+      <!--				</div>-->
+      <!--			</div>-->
+      <div class="catalog-menu">
+        <ul>
+          {% for link in linklists[section.settings.menu_catalog].links %}
+
+            <li><a href="{{ link.url }}">{{ link.title }}</a>
+
+            {% assign sub_links_count = link.links | size%}
+            {% if  sub_links_count > 0 %}
+            <span class="catalog-menu__arr js-catalog-menu-modal-toggle">
+								<span class="icon icon-i-arr-down"></span>
+							</span>
+              <div class="catalog-menu__modal">
+                {% for sub_link in link.links %}
+                <div class="catalog-menu__modal-box">
+
+                  <div class="catalog-menu__modal-category">
+                    <div class="catalog-menu__modal-title">
+                      <a href="{{ sub_link.url }}">{{ sub_link.title }}</a>
+
+                    </div>
+                    {% assign sub_sub_links_count = sub_link.links | size%}
+                    {% if  sub_sub_links_count > 0 %}
+                    <span class="catalog-menu__modal-category-arr js-catalog-menu-category-toggle">
+											<span class="icon icon-i-arr-down"></span>
+										</span>
+                  </div>
+
+                  <div class="catalog-menu__modal-list">
+                    <ul>
+                      {% for sub_sub_link in sub_link.links %}
+                      <li><a href="{{ sub_sub_link.url }}">{{ sub_sub_link.title }}</a></li>
+
+                      {% endfor %}
+                    </ul>
+                  </div>
+                  {% endif %}
+                </div>
+                {% endfor %}
+              </div>
+            </li>
+          {% endif %}
+
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="modal-menu">
+    <div class="modal-menu__box">
+      <!--			<div class="search-form">-->
+      <!--				<div class="search-form__box">-->
+      <!--					<form action="#" autocomplete="off">-->
+      <!--						<div class="form-group">-->
+      <!--							<input type="text" name="search" placeholder="Пошук">-->
+      <!--							<button type="submit"><span class="icon icon-i-search"></span></button>-->
+      <!--							<button type="reset"><span class="icon icon-close"></span></button>-->
+      <!--						</div>-->
+      <!--					</form>-->
+      <!--				</div>-->
+      <!--				<div class="search-form__modal">-->
+      <!--					<div class="search-form__nothing">-->
+      <!--						<div class="search-form__nothing-text">Нажаль пошук не дав результатів. Переконайтесь у правильності вводу та повторіть спробу.</div>-->
+      <!--						<div class="search-form__nothing-count">Меренживо – 0 результатів</div>-->
+      <!--					</div>-->
+      <!--					<div class="search-form__result">-->
+      <!--						<div class="search-form__list">-->
+      <!--							<div class="product js-product-flip">-->
+      <!--								<div class="product-head">-->
+      <!--									<a href="product-card.html" class="product-img">-->
+      <!--										<img src="img/product-img-2.jpg" alt="" data-image-back="img/product-img-4.jpg">-->
+      <!--									</a>-->
+      <!--									<div class="product-labels"><div class="product-label">New</div></div>-->
+      <!--									<div class="product-action">-->
+      <!--										<a href="" class="btn btn-white btn-lg" data-toggle="modal" data-target="#modal-product"><span class="icon icon-i-search"></span><span class="icon icon-i-search"></span><span class="icon icon-i-search"></span>Швидкий перегляд</a>-->
+      <!--										<a href="" class="btn btn-white btn-icon btn-lg"><span class="icon icon-i-heart"></span></a>-->
+      <!--									</div>-->
+      <!--								</div>-->
+      <!--								<div class="product-body">-->
+      <!--									<div class="product-title">-->
+      <!--										<a href="product-card.html">ЖЕНЕПІ К 3</a>-->
+      <!--									</div>-->
+      <!--									<div class="product-rating">-->
+      <!--										<div class="rating">-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill"></span>-->
+      <!--										</div>-->
+      <!--										<div class="product-reviews">(0)</div>-->
+      <!--									</div>-->
+      <!--									<div class="product-price">-->
+      <!--										<span class="price">1 378.00 UAH</span>-->
+      <!--									</div>-->
+      <!--								</div>-->
+      <!--							</div>-->
+      <!--							<div class="product js-product-flip">-->
+      <!--								<div class="product-head">-->
+      <!--									<a href="product-card.html" class="product-img">-->
+      <!--										<img src="img/product-img-2.jpg" alt="" data-image-back="img/product-img-4.jpg">-->
+      <!--									</a>-->
+      <!--									<div class="product-labels"><div class="product-label">New</div></div>-->
+      <!--									<div class="product-action">-->
+      <!--										<a href="" class="btn btn-white btn-lg" data-toggle="modal" data-target="#modal-product"><span class="icon icon-i-search"></span>Швидкий перегляд</a>-->
+      <!--										<a href="" class="btn btn-white btn-icon btn-lg"><span class="icon icon-i-heart"></span></a>-->
+      <!--									</div>-->
+      <!--								</div>-->
+      <!--								<div class="product-body">-->
+      <!--									<div class="product-title">-->
+      <!--										<a href="product-card.html">ЖЕНЕПІ К 3</a>-->
+      <!--									</div>-->
+      <!--									<div class="product-rating">-->
+      <!--										<div class="rating">-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill active"></span>-->
+      <!--											<span class="icon icon-i-star-fill"></span>-->
+      <!--										</div>-->
+      <!--										<div class="product-reviews">(0)</div>-->
+      <!--									</div>-->
+      <!--									<div class="product-price">-->
+      <!--										<span class="price">1 378.00 UAH</span>-->
+      <!--									</div>-->
+      <!--								</div>-->
+      <!--							</div>-->
+      <!--						</div>-->
+      <!--						<div class="search-form__link">-->
+      <!--							<a href="search.html" class="btn btn-black">всі результати пошуку</a>-->
+      <!--						</div>-->
+      <!--					</div>-->
+      <!--				</div>-->
+      <!--			</div>-->
+      <div class="modal-menu__box-list">
+        <div class="top-menu">
+          <ul>
+            {% for link in linklists[section.settings.menu].links %}
+            {% assign sub_links_count = link.links | size%}
+                <li><a href="{{ link.url }}">{{ link.title }}{% if sub_links_count > 0 %}<span class="icon icon-i-arr-down"></span> {% endif %}</a>
+                  {% if sub_links_count > 0 %}
+                <ul>
+                  {% for sub_link in link.links %}
+
+                      <li><a href="{{ sub_link.url }}">{{ sub_link.title }}</a></li>
+
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endfor %}
+
+          </ul>
+        </div>
+      </div>
+      <div class="modal-menu__close js-modal-menu-close"><span class="icon icon-close"></span></div>
+    </div>
+  </div>
+  <div class="search-modal">
+    <div class="container">
+      <div class="search-container">
+        <div class="title text-center h1">Пошук по каталогу</div>
+        <div class="search-section">
+          <div class="search-section__form">
+            <form action="{{ routes.search_url }}" method="get" role="search"  autocomplete="off">
+              <div class="form-group">
+                <input    type="text"
+                          name="q"
+                          placeholder="{{ 'general.search.placeholder' | t }}"
+                          role="combobox"
+                          aria-autocomplete="list"
+                          aria-owns="predictive-search-results"
+                          aria-expanded="false"
+                          aria-label="{{ 'general.search.placeholder' | t }}"
+                          aria-haspopup="listbox"
+                          class="search-form__input search-bar__input"
+                          data-predictive-search-drawer-input
+                          data-base-url="{{ routes.search_url }}"/>
+                <button  type="submit" data-search-form-submit><span class="icon icon-i-search"></span></button>
+                <!--<button type="reset"><span class="icon icon-close"></span></button>-->
+              </div>
+            </form>
+          </div>
+          <!--					<div class="search-section__nothing">-->
+          <!--						<div class="search-section__nothing-text">Нажаль пошук не дав результатів. Переконайтесь у правильності вводу та повторіть спробу.</div>-->
+          <!--						<div class="search-section__nothing-count">Меренживо – 0 результатів</div>-->
+          <!--					</div>-->
+          <div class="search-section__list">
+            <div class="row">
+              <div class="col-lg-3 col-6">
+                <div class="product js-product-flip">
+                  <div class="product-head">
+                    <a href="product-card.html" class="product-img">
+                      <img src="img/product-img-2.jpg" alt="" data-image-back="img/product-img-4.jpg">
+                    </a>
+                    <div class="product-labels"><div class="product-label">New</div></div>
+                    <div class="product-action">
+                      <a href="" class="btn btn-white btn-lg" data-toggle="modal" data-target="#modal-product"><span class="icon icon-i-search"></span>Швидкий перегляд</a>
+                      <a href="" class="btn btn-white btn-icon btn-lg"><span class="icon icon-i-heart"></span></a>
+                    </div>
+                  </div>
+                  <div class="product-body">
+                    <div class="product-title">
+                      <a href="product-card.html">ЖЕНЕПІ К 3</a>
+                    </div>
+                    <div class="product-rating">
+                      <div class="rating">
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill"></span>
+                      </div>
+                      <div class="product-reviews">(0)</div>
+                    </div>
+                    <div class="product-price">
+                      <span class="price">1 378.00 UAH</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="product js-product-flip">
+                  <div class="product-head">
+                    <a href="product-card.html" class="product-img">
+                      <img src="img/product-img-2.jpg" alt="" data-image-back="img/product-img-4.jpg">
+                    </a>
+                    <div class="product-labels"><div class="product-label">New</div></div>
+                    <div class="product-action">
+                      <a href="" class="btn btn-white btn-lg" data-toggle="modal" data-target="#modal-product"><span class="icon icon-i-search"></span>Швидкий перегляд</a>
+                      <a href="" class="btn btn-white btn-icon btn-lg"><span class="icon icon-i-heart"></span></a>
+                    </div>
+                  </div>
+                  <div class="product-body">
+                    <div class="product-title">
+                      <a href="product-card.html">ЖЕНЕПІ К 3</a>
+                    </div>
+                    <div class="product-rating">
+                      <div class="rating">
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill"></span>
+                      </div>
+                      <div class="product-reviews">(0)</div>
+                    </div>
+                    <div class="product-price">
+                      <span class="price">1 378.00 UAH</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="product js-product-flip">
+                  <div class="product-head">
+                    <a href="product-card.html" class="product-img">
+                      <img src="img/product-img-2.jpg" alt="" data-image-back="img/product-img-4.jpg">
+                    </a>
+                    <div class="product-labels"><div class="product-label">New</div></div>
+                    <div class="product-action">
+                      <a href="" class="btn btn-white btn-lg" data-toggle="modal" data-target="#modal-product"><span class="icon icon-i-search"></span>Швидкий перегляд</a>
+                      <a href="" class="btn btn-white btn-icon btn-lg"><span class="icon icon-i-heart"></span></a>
+                    </div>
+                  </div>
+                  <div class="product-body">
+                    <div class="product-title">
+                      <a href="product-card.html">ЖЕНЕПІ К 3</a>
+                    </div>
+                    <div class="product-rating">
+                      <div class="rating">
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill"></span>
+                      </div>
+                      <div class="product-reviews">(0)</div>
+                    </div>
+                    <div class="product-price">
+                      <span class="price">1 378.00 UAH</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-3 col-6">
+                <div class="product js-product-flip">
+                  <div class="product-head">
+                    <a href="product-card.html" class="product-img">
+                      <img src="img/product-img-2.jpg" alt="" data-image-back="img/product-img-4.jpg">
+                    </a>
+                    <div class="product-labels"><div class="product-label">New</div></div>
+                    <div class="product-action">
+                      <a href="" class="btn btn-white btn-lg" data-toggle="modal" data-target="#modal-product"><span class="icon icon-i-search"></span>Швидкий перегляд</a>
+                      <a href="" class="btn btn-white btn-icon btn-lg"><span class="icon icon-i-heart"></span></a>
+                    </div>
+                  </div>
+                  <div class="product-body">
+                    <div class="product-title">
+                      <a href="product-card.html">ЖЕНЕПІ К 3</a>
+                    </div>
+                    <div class="product-rating">
+                      <div class="rating">
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill active"></span>
+                        <span class="icon icon-i-star-fill"></span>
+                      </div>
+                      <div class="product-reviews">(0)</div>
+                    </div>
+                    <div class="product-price">
+                      <span class="price">1 378.00 UAH</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="search-section__link">
+            <a href="search.html" class="btn btn-black">всі результати пошуку</a>
+          </div>
+        </div>
+        <div class="search-modal__close js-modal-search-close">
+          <span class="icon icon-close"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="header-modals">
+    <div class="container">
+      <div class="header-modals__list">
+        <!--				<div class="header-modal">-->
+        <!--					<div class="header-modal__list">-->
+        <!--						<div class="header-modal__list-product">-->
+        <!--							<div class="header-modal__list-product-head">-->
+        <!--								<span class="icon icon-i-heart"></span>-->
+        <!--							</div>-->
+        <!--							<div class="header-modal__list-product-body">-->
+        <!--								<div class="header-modal__list-product-title">КАЛІПСО С170</div>-->
+        <!--								<div class="header-modal__list-product-text">додано до улюбленого</div>-->
+        <!--							</div>-->
+        <!--						</div>-->
+        <!--					</div>-->
+        <!--					<div class="header-modal__list-link">-->
+        <!--						<a href="" class="btn btn-lg">Переглянути улюблене</a>-->
+        <!--					</div>-->
+        <!--					<div class="header-modal__close js-header-modal-close">-->
+        <!--						<span class="icon icon-close"></span>-->
+        <!--					</div>-->
+        <!--				</div>-->
+        <!--				<div class="header-modal">-->
+        <!--					<div class="header-modal__list">-->
+        <!--						<div class="header-modal__list-product">-->
+        <!--							<div class="header-modal__list-product-head">-->
+        <!--								<span class="icon icon-i-bag-line"></span>-->
+        <!--							</div>-->
+        <!--							<div class="header-modal__list-product-body">-->
+        <!--								<div class="header-modal__list-product-title">КАЛІПСО С170</div>-->
+        <!--								<div class="header-modal__list-product-text">додано до кошика</div>-->
+        <!--							</div>-->
+        <!--						</div>-->
+        <!--					</div>-->
+        <!--					<div class="header-modal__list-link">-->
+        <!--						<a href="checkout.html" class="btn btn-lg">Оформити замовлення</a>-->
+        <!--					</div>-->
+        <!--					<div class="header-modal__close js-header-modal-close">-->
+        <!--						<span class="icon icon-close"></span>-->
+        <!--					</div>-->
+        <!--				</div>-->
+      </div>
+    </div>
+  </div>
+
+</header>
+
+<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="modal-title">Авторизація</div>
+        <div class="login">
+          <div class="login-tabs">
+            <ul>
+              <li class="active" data-tabs="login">Вхід</li>
+              <li data-tabs="registration">Реєстрація</li>
+            </ul>
+          </div>
+          <div class="login-list">
+            <div class="login-list__box show" data-tabs="login">
+              {% form 'customer_login', novalidate: 'novalidate' %}
+                <div class="form-group">
+                  <input type="email"
+                         name="customer[email]"
+                         id="CustomerEmail"
+                         autocomplete="email"
+                         autocorrect="off"
+                         autocapitalize="off"
+                          {%- if form.errors contains 'form' -%}
+                            class="input--error"
+                            aria-invalid="true"
+                          {%- endif -%}
+                         placeholder="Email"
+                  >
+                </div>
+                <div class="form-group">
+                  <input input
+                         type="password"
+                         value=""
+                         name="customer[password]"
+                         id="CustomerPassword"
+                          {%- if form.errors contains 'form' -%}
+                            class="input--error"
+                            aria-invalid="true"
+                          {%- endif -%}
+                         placeholder="Пароль"
+                  >
+                </div>
+                <div class="forgot-password">
+                  <a href="#recover" id="RecoverPassword" class="js-modal">Забули пароль?</a>
+                </div>
+                <div class="form-button">
+                  <input type="submit" class="btn" value="{{ 'customer.login.sign_in' | t }}">
+                </div>
+                <div class="login-socials">
+                  <a href="" class="login-social social-facebook"><img src="img/soc-facebook.svg" alt="">Facebook</a>
+                  <a href="" class="login-social social-google"><img src="img/soc-google.svg" alt="">Google</a>
+                </div>
+              {% endform %}
+            </div>
+            <div class="login-list__box" data-tabs="registration">
+
+
+
+              {%- assign formId = 'RegisterForm' -%}
+              {% form 'create_customer', id: formId, novalidate: 'novalidate' %}
+                {% include 'form-status', form: form, form_id: formId %}
+
+                <div class="form-group">
+
+                  <input type="text" name="customer[first_name]" id="{{ formId }}-FirstName" {% if form.first_name %}value="{{ form.first_name }}"{% endif %} autocomplete="given-name" placeholder="Ім’я*">
+
+                </div>
+
+                <div class="form-group">
+
+                  <input placeholder="Прізвище*" type="text" name="customer[last_name]" id="{{ formId }}-LastName" {% if form.last_name %}value="{{ form.last_name }}"{% endif %} autocomplete="family-name">
+
+                </div>
+
+                <div class="form-group">
+                  <input
+                          placeholder="Email*"
+                          type="email"
+                          name="customer[email]"
+                          id="{{ formId }}-email"
+                          class="{% if form.errors contains 'email' %} input--error{% endif %}"
+                          {% if form.email %} value="{{ form.email }}"{% endif %}
+                          autocorrect="off"
+                          autocapitalize="off"
+                          autocomplete="email"
+                          aria-required="true"
+                          {%- if form.errors contains 'email' -%}
+                            class="input--error"
+                            aria-invalid="true"
+                            aria-describedby="{{ formId }}-email-error"
+                          {%- endif -%}
+                  >
+
+                </div>
+
+
+                <div class="form-group">
+                  <input
+                          placeholder="Телефон*"
+                          type="tel"
+                          name="customer[phone]"
+                          id="{{ formId }}-phone"
+
+                  >
+
+                </div>
+
+                <div class="form-group">
+                  <input
+                          placeholder="Пароль*"
+                          type="password"
+                          name="customer[password]"
+                          id="{{ formId }}-password"
+                          class="{% if form.errors contains 'password' %} input--error{% endif %}"
+                          aria-required="true"
+                          {%- if form.errors contains 'password' -%}
+                            class="input--error"
+                            aria-invalid="true"
+                            aria-describedby="{{ formId }}-password-error"
+                          {%- endif -%}
+                  >
+
+                </div>
+
+
+
+              <div class="login-security">
+                <div class="checkbox check-lg">
+                  <input
+                          type="checkbox"
+                          id="{{ formId }}-agree"
+                          name="customer[agree]"
+                          value="agree"
+                  />
+                  <label for="security">Я погоджуюсь з правилами обробки персональних данних</label>
+                </div>
+              </div>
+
+
+
+
+
+
+              {% comment %}
+                {%- if form.errors contains 'email' -%}
+                  <span id="{{ formId }}-email-error" class="input-error-message">
+              <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+              {% include 'icon-error' %}
+              <span>{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+            </span>
+                {%- endif -%}
+
+                <label for="{{ formId }}-password">{{ 'customer.register.password' | t }}</label>
+                <input
+                        type="password"
+                        name="customer[password]"
+                        id="{{ formId }}-password"
+                        class="{% if form.errors contains 'password' %} input--error{% endif %}"
+                        aria-required="true"
+                        {%- if form.errors contains 'password' -%}
+                          class="input--error"
+                          aria-invalid="true"
+                          aria-describedby="{{ formId }}-password-error"
+                        {%- endif -%}
+                >
+                {%- if form.errors contains 'password' -%}
+                  <span id="{{ formId}}-password-error" class="input-error-message">
+              {% include 'icon-error' %}
+              <span>{{ form.errors.translated_fields['password'] | capitalize }} {{ form.errors.messages['password'] }}.</span>
+            </span>
+                {%- endif -%}
+{%endcomment%}
+                <div class="form-button">
+                  <input type="submit" value="{{ 'customer.register.submit' | t }}" class="btn">
+
+
+
+              {% endform %}
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span class="icon icon-close"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "Header"
+},
+"settings": [
+{
+"type": "link_list",
+"id": "menu",
+"label": "Main menu navigation"
+},
+{
+"type": "link_list",
+"id": "menu_catalog",
+"label": "Catalog menu navigation"
+},
+{
+"type": "text",
+"id": "phone_number1",
+"label": "Main Phone number"
+},
+{
+"type": "text",
+"id": "phone_number2",
+"label": "Second Phone number"
+},
+{
+"type": "text",
+"id": "phone_number3",
+"label": "Theard Phone number"
+}
+
+],
+"blocks": [
+{
+"type": "featured_collection",
+"name": {
+
+"en": "Brand"
+},
+"settings": [
+{
+"label": {
+"en": "Brand"
+},
+"id": "brand",
+"type": "collection"
+}
+]
+}
+]
+}
+{% endschema %}

@@ -1,0 +1,84 @@
+<section class="section main-about">
+  <div class="container">
+    <div class="title">
+      <h2 class="h1">{{ section.settings.section_title }}</h2>
+    </div>
+    <div class="main-about__list">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="main-about__box">
+            <div class="main-about__box-title">{{ section.settings.about_brand_title }}</div>
+            <div class="main-about__box-text">
+              <p>{{ section.settings.about_brand_text }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="main-about__box">
+            <div class="main-about__box-title">{{ section.settings.more_about_title }}</div>
+            <div class="main-about__box-text">
+              <p>{{ section.settings.more_about_text }}</p>
+            </div>
+            <div class="main-about__box-link">
+              <a href="" class="btn">Каталог товарів</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+"name": {
+"en": "About us"
+},
+"settings": [
+{
+"label": "Section title",
+"id": "section_title",
+"type": "text",
+"default": "Section title"
+},
+{
+"label": "About brand title",
+"id": "about_brand_title",
+"type": "text",
+"default": "About brand title"
+},
+{
+"label": "About brand text",
+"id": "about_brand_text",
+"type": "richtext",
+"default": "<p>About brand information</p>"
+}
+,
+{
+"label": "More adout brand title",
+"id": "more_about_title",
+"type": "text",
+"default": "More adout brand title"
+},
+{
+"label": "More adout brand  text",
+"id": "more_about_text",
+"type": "richtext",
+"default": "<p>More adout brand  information</p>"
+}
+
+
+],
+"presets": [
+{
+"name": {
+"en": "About us"
+},
+"category": {
+
+"en": "Text"
+
+}
+}
+]
+}
+{% endschema %}

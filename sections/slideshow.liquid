@@ -1,0 +1,93 @@
+<div class="head">
+  <div class="head-slider js-head-slider">
+    {%- for block in section.blocks -%}
+    {% if block.type == 'video' %}
+      {%- assign block_video = block.settings.slide_video -%}
+
+    <div>
+      <div class="head-slider__video js-youtube" data-src="{{ block_video.url }}" data-link="http://google.com" data-vq="vq=hd1080"></div>
+    </div>
+    {% endif %}
+
+    {% if block.type == 'image' %}
+    {%- assign block_image = block.settings.slide_image -%}
+
+    <div>
+      <a href="catalog.html" class="head-slider__img">
+        <picture>
+          <source media="(max-width: 767px)" srcset="{{  block_image | img_url: "master" }}">
+          <source media="(max-width: 991px)" srcset="{{  block_image | img_url: "master" }}">
+          <img src="{{  block_image | img_url: "master" }}" alt="Слайдер">
+        </picture>
+      </a>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "Slideshow"
+},
+"blocks": [
+{
+"type": "image",
+"name": {
+"en": "Image"
+},
+"settings": [
+{
+"label": {
+"en": "Slide Image"
+},
+"id": "slide_image",
+"type": "image_picker"
+},
+{
+"label": {
+"en": "Slide Image table"
+},
+"id": "slide_image_table",
+"type": "image_picker"
+},
+{
+"label": {
+"en": "Slide Image phone"
+},
+"id": "slide_image_phone",
+"type": "image_picker"
+}
+]
+},
+{
+"type": "video",
+"name": {
+"en": "Video"
+},
+"settings": [
+{
+"type": "video_url",
+"id": "slide_video",
+"label": "Slide Video",
+"accept": ["youtube", "vimeo"],
+"default": "https://www.youtube.com/watch?v=gtncBNg1aHY",
+"info": "Slider video",
+"placeholder": "Sloder video"
+}
+]
+}
+],
+"presets": [
+{
+"name": {
+"en": "Slideshow"
+},
+"category": {
+"en": "Image"
+
+}
+}
+]
+}
+{% endschema %}

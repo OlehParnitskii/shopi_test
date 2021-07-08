@@ -1,0 +1,102 @@
+
+<div class="content bg-grey">
+  <div class="container">
+    <div class="title text-center">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="subtitle text-center">{{ page.description }}</div>
+    <div class="faq">
+      <div class="faq-list">
+        {%- for block in section.blocks -%}
+        <div class="faq-list__box">
+          <div class="faq-list__box-head js-faq-toggle">{{ block.settings.name }}<span class="icon icon-i-arr-down"></span></div>
+          <div class="faq-list__box-body">
+            <p><b>Вимоги (всі пункти строго обов'язкові):</b></p>
+            {% assign array = block.settings.requirements | split: ';'%}
+            <ul>
+              {% for li in array %}
+              <li>{{ li }}</li>
+              {% endfor %}
+            </ul>
+
+            <br/>
+            <p><b>Обов'язки:</b></p>
+            {% assign array = block.settings.responsibilities | split: ';'%}
+            <ul>
+              {% for li in array %}
+                <li>{{ li }}</li>
+              {% endfor %}
+            </ul>
+
+            <br/>
+            <a href="" class="btn btn-black" data-toggle="modal" data-target="#modal-vacancy">Відгукнутись на вакансію</a>
+          </div>
+        </div>
+        {% endfor %}
+
+      </div>
+    </div>
+    <div class="faq-desc">
+      <div class="text">
+        <h4>{{ section.settings.title }}</h4>
+        <p>{{ section.settings.text }}</p>
+        <p> Надсилайте резюме на адресу: <a href="mailto:shop@ajour.com">shop@ajour.com</a><br/>Ми розглянемо кожну кандидатуру!</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "Vacancy"
+},
+"settings": [
+
+{
+"label": {
+"en": "Information  title"
+},
+"id": "title",
+"type": "text"
+},
+{
+"label": {
+"en": "Information text"
+},
+"id": "text",
+"type": "richtext"
+}
+],
+"blocks": [
+{
+"type": "vacancy",
+"name": {
+"en": "Vacancy"
+},
+"settings": [
+{
+"label": {
+"en": "Name"
+},
+"id": "name",
+"type": "text"
+},
+{
+"label": {
+"en": "Requirements"
+},
+"id": "requirements",
+"type": "richtext"
+},
+{
+"label": {
+"en": "Responsibilities"
+},
+"id": "responsibilities",
+"type": "richtext"
+}
+]
+}
+]
+}
+{% endschema %}

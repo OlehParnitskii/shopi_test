@@ -1,0 +1,63 @@
+<section class="section main-catalog">
+  <div class="container-fluid">
+    <div class="main-catalog-list">
+      <div class="row justify-content-center">
+        {% for block in section.blocks limit: section.blocks.size %}
+          {%- assign collection = collections[block.settings.collection] -%}
+        <div class="col-md-4">
+          <div class="main-catalog-list__box">
+            <a href="{{ collection.url }}" class="main-catalog-list__box-img" style="background-image: url({{ collection.image | img_url: 'master' }})">
+              <img src="{{ collection.image | img_url: 'master' }}" alt="">
+            </a>
+            <div class="main-catalog-list__box-title">{{ collection.title }}</div>
+            <div class="main-catalog-list__box-link">
+              <a href="{{ collection.url }}" class="btn btn-black">перейти в каталог</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+"name": {
+"en": "Featured collection"
+},
+"settings": [
+
+
+],
+"blocks": [
+{
+"type": "featured_collection",
+"name": {
+
+"en": "Collection"
+},
+"settings": [
+{
+"label": {
+"en": "Collection"
+},
+"id": "collection",
+"type": "collection"
+}
+]
+}
+],
+"presets": [
+{
+"name": {
+"en": "Recomend collections list"
+},
+"category": {
+
+"en": "Collection"
+
+}
+}
+]
+}
+{% endschema %}

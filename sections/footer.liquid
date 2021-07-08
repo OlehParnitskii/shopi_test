@@ -1,0 +1,216 @@
+<footer class="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="footer-group">
+        <div class="footer-group__box">
+          <div class="footer-group__box-title">{{ section.settings.fedback_title }}</div>
+          <div class="footer-group__box-text">
+            <p>{{ section.settings.fedback_text }}</p>
+          </div>
+          <div class="subscribe">
+            {%- assign formId = 'ContactFooter' -%}
+            {% form 'customer', id: formId, novalidate: 'novalidate' %}
+              {%- if form.posted_successfully? -%}
+                <p class="form-message form-message--success" tabindex="-1" data-form-status>
+                  {{ 'general.newsletter_form.confirmation' | t }}
+                </p>
+              {%- endif -%}
+
+            <div class="subscribe-form">
+
+              <input type="hidden" name="contact[tags]" value="newsletter">
+              <div class="input-group form-group {% if form.errors %} input-group--error{% endif %}">
+                <input type="email"
+                       name="contact[email]"
+                       id="{{ formId }}-email"
+                       class="input-group__field newsletter__input{% if form.errors %} input--error{% endif %}"
+                       value="{{ form.email }}"
+                       placeholder="e-mail"
+                       aria-label="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                       aria-required="true"
+                       required
+                       autocorrect="off"
+                       autocapitalize="off"
+                {% if form.errors %}
+                  aria-invalid="true"
+                  aria-describedby="{{ formId }}-email-error"
+                  data-form-status
+                        {% endif %}>
+              </div>
+              <div class="form-button">
+                        <button type="submit" class="btn newsletter__submit" name="commit" >
+                          <span class="newsletter__submit-text--large">{{ 'general.newsletter_form.submit' | t }}</span>
+                        </button>
+                      </div>
+
+            </div>
+
+              {% if form.errors contains 'email' %}
+                <span id="{{ formId }}-email-error" class="input-error-message">
+                        <span class="visually-hidden">{{ 'general.accessibility.error' | t }} </span>
+                        <span class="site-footer__newsletter-error">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}.</span>
+                      </span>
+              {% endif %}
+
+            {% endform %}
+
+
+          </div>
+        </div>
+        <div class="footer-group__box">
+          <div class="footer-group__box-title">{{ section.settings.social_title }}</div>
+          <div class="footer-group__box-text">{{ section.settings.social_text }}</div>
+          <div class="socials">
+            <a href="{{ section.settings.facebook}}" target="_blank">
+              <span class="icon icon-social-facebook"></span>
+            </a>
+            <a href="{{ section.settings.instagram}}" target="_blank">
+              <span class="icon icon-social-instagram"></span>
+            </a>
+            <a href="{{ section.settings.twiter}}" target="_blank">
+              <span class="icon icon-social-twitter"></span>
+            </a>
+            <a href="{{ section.settings.pinterest}}" target="_blank">
+              <span class="icon icon-social-pinterest"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-middle">
+    <div class="container">
+      <div class="footer-inner">
+        {% for link in linklists[section.settings.menu_catalog].links %}
+          {% assign last =  linklists[section.settings.menu_catalog].links | last %}
+          <div class="footer-box {% if link.title == last.title %} footer-menu {% endif %}">
+            <div class="footer-box__head">
+              <div class="footer-box__title">
+                <a href="{{ link.url }}">{{ link.title }}</a>
+
+
+              </div>
+              <div class="footer-box__arr js-footer-box-toggle">
+                <span class="icon icon-i-arr-down"></span>
+              </div>
+            </div>
+            {% assign sub_links_count = link.links | size%}
+            {% if sub_links_count > 0 %}
+            <div class="footer-box__body">
+
+              <ul>
+                {% for sub_link in link.links %}
+                <li><a href="{{ sub_link.url }}">{{ sub_link.title }}</a></li>
+
+                {%   endfor %}
+              </ul>
+              {% if link.title == 'Зворотній зв’язок' %}
+                <div class="payment d-none d-xl-flex">
+                  <a href="">
+                    {% include "mastercard-logo" %}
+                  </a>
+                  <a href="">
+                    {% include "visa-logo" %}
+                  </a>
+                </div>
+
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="row align-items-center justify-content-between">
+        <div class="col-auto">
+          <div class="copyright">© 2020 AJOUR</div>
+        </div>
+        <div class="col-auto d-xl-none">
+          <div class="payment">
+            <a href="">
+              {% include "mastercard-logo" %}
+            </a>
+            <a href="">
+              {% include "visa-logo" %}
+            </a>
+          </div>
+        </div>
+        <div class="col-auto">
+          <div class="develop">
+            <a href="https://web-systems.solutions/" target="_blank">
+              {% include "wss" %}
+              <span class="develop-modal">Якісні рішення на основі ефективних технологій</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+{% schema %}
+{
+"name": {
+"en": "Footer"
+},
+"settings": [
+{
+"type": "text",
+"id": "fedback_title",
+"label": "Fedback title",
+"default": "Title"
+},
+{
+"type": "richtext",
+"id": "fedback_text",
+"label": "Fedback text",
+"default": "<p>Text information</p>"
+},
+{
+"type": "text",
+"id": "social_title",
+"label": "Social title",
+"default": "Title"
+},
+{
+"type": "richtext",
+"id": "social_text",
+"label": "Social text",
+"default": "<p>Text information</p>"
+},
+{
+"type": "text",
+"id": "facebook",
+"label": "Facebook url"
+},
+{
+"type": "text",
+"id": "instagram",
+"label": "Instagram url"
+},
+{
+"type": "text",
+"id": "twiter",
+"label": "Twiter url"
+},
+{
+"type": "text",
+"id": "pinterest",
+"label": "Pinterest url"
+},
+{
+"type": "link_list",
+"id": "menu_catalog",
+"label": "Footer catalog menu",
+"default": "footer"
+}
+
+]
+}
+
+{% endschema %}

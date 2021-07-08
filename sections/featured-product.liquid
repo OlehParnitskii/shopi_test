@@ -1,0 +1,74 @@
+{%- assign product = all_products[section.settings.featured_product] -%}
+<section class="section hot">
+  <div class="container">
+    <div class="hot-box">
+      <div class="row flex-row-reverse align-items-center">
+        <div class="col-md-6">
+          <div class="hot-box__head">
+            {% if product.metafields.Product_preview.product_preview != blank%}
+            <a href="{{ product.collections[0].url }}" class="hot-box__head-img" style="background-image: url({{ product.metafields.Product_preview.product_preview  }})">
+              <img src="{{ product.metafields.Product_preview.product_preview}}" alt="">
+            </a>
+            {% else %}
+            <a href="{{ product.collections[0].url }}" class="hot-box__head-img" style="background-image: url({{ product.images | first| img_url: "master" }})">
+              <img src="{{ product.images | first| img_url: "master" }}" alt="">
+            </a>
+            {% endif %}
+
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="hot-box__body">
+            <div class="hot-box__list">
+              {% for image in product.images %}
+
+              <div class="hot-box__list-box">
+                <a href="{{ product.collections[0].url }}" class="hot-box__list-img" style="background-image: url({{ image |img_url: "master"  }})">
+                  <img src="{{ image |img_url: "master"  }}" alt="">
+                </a>
+              </div>
+
+              {% endfor %}
+            </div>
+            <div class="hot-box__title">
+              <h2 class="h1">{{ product.title }}</h2>
+            </div>
+            <div class="hot-box__text">
+              <p>{{ product.description }}</p>
+            </div>
+            <div class="hot-box__link">
+              <a href="{{ product.collections[0].url }}" class="btn btn-black">перейти в каталог</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+"name": {
+"en": "Featured product"
+},
+"settings": [
+{
+"type": "product",
+"id": "featured_product",
+"label": {
+"en": "Product"
+}
+}
+],
+"presets": [
+{
+"name": {
+"en": "Featured product"
+},
+"category": {
+"en": "Product"
+}
+}
+]
+}
+{% endschema %}

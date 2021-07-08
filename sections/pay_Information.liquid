@@ -1,0 +1,106 @@
+<div class="benefits">
+  <div class="container">
+    <div class="benefits-list">
+      {% if section.settings.show_delivery == true%}
+      <div class="benefits-list__box">
+        <div class="benefits-list__box-icon">
+          {% include "delivery" %}
+        </div>
+        <div class="benefits-list__box-title">{{ section.settings.delivery }}</div>
+      </div>
+      {% endif %}
+      {% if section.settings.show_pay == true%}
+        <div class="benefits-list__box">
+          <div class="benefits-list__box-icon">
+            {% include "credit_card" %}
+          </div>
+          <div class="benefits-list__box-title">{{ section.settings.pay }}</div>
+        </div>
+      {% endif %}
+      {% if section.settings.show_share == true%}
+        <div class="benefits-list__box">
+          <div class="benefits-list__box-icon">
+            {% include "bag" %}
+          </div>
+          <div class="benefits-list__box-title">{{ section.settings.share }}</div>
+        </div>
+      {% endif %}
+      {% if section.settings.show_bonus == true%}
+        <div class="benefits-list__box">
+          <div class="benefits-list__box-icon">
+            {% include "discont" %}
+          </div>
+          <div class="benefits-list__box-title">{{ section.settings.bonus }}</div>
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "Information"
+},
+"settings": [
+{
+"label": "Delivery",
+"id": "delivery",
+"type": "text",
+"default": "Delivery"
+},
+{
+"type": "checkbox",
+"id": "show_delivery",
+"default": true,
+"label": "Show delivery"
+},
+{
+"label": "Pay ",
+"id": "pay",
+"type": "text",
+"default": "Pay"
+},
+{
+"type": "checkbox",
+"id": "show_pay",
+"default": true,
+"label": "Show Pay"
+},
+{
+"label": "Share ",
+"id": "share",
+"type": "text",
+"default": "Share"
+},
+{
+"type": "checkbox",
+"id": "show_share",
+"default": true,
+"label": "Show Share"
+},
+{
+"label": "Bonus ",
+"id": "bonus",
+"type": "text",
+"default": "Bonus"
+},
+{
+"type": "checkbox",
+"id": "show_bonus",
+"default": true,
+"label": "Show Bonus"
+}
+],
+"presets": [
+{
+"name": {
+"en": "Information"
+},
+"category": {
+"en": "Text"
+}
+}
+]
+}
+{% endschema %}

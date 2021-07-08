@@ -1,0 +1,124 @@
+<div class="breadcrumbs">
+  <div class="container">
+    <ul>
+      <li><a href="index.html">Головна</a></li>
+      <li>Про команію</li>
+    </ul>
+  </div>
+</div>
+<div class="content">
+  <div class="container">
+    <div class="title text-center">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="subtitle text-center">Дізнайтесь більше про нас</div>
+    <div class="text">
+      <blockquote>{{ page.description }}</blockquote>
+      <iframe width="560" height="315" src="{{ section.settings.video_url }}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <p>{{ section.settings.information }}</p>
+      {%- for block in section.blocks -%}
+
+
+      <img class="{% if block.settings.img_float == "right" %}float-right {% endif %} float-left" src="{{ block.settings.image | img_url: "master" }}" alt="">
+      <h2>{{ block.settings.title}}</h2>
+      <p>{{ block.settings.text}}</p>
+      <br/>
+      {% endfor %}
+
+      <div class="text-question">
+        <div class="text-question__title">
+          <p>{{ section.settings.more_information }}</p>
+        </div>
+        <div class="text-question__link">
+          <a href="{{ section.settings.button_url }}" class="btn btn-black">Дізнатись більше</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "about"
+},
+"settings": [
+{
+"id": "video_url",
+"type": "video_url",
+"label": "Video URL",
+"accept": ["youtube", "vimeo"],
+"default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+"info": "text",
+"placeholder": "text"
+},
+{
+"label" : "Informations",
+"type": "richtext",
+"id": "information",
+"default": "<p>Information text</p>"
+},
+{
+"label" : "More Informations about us",
+"type": "richtext",
+"id": "more_information",
+"default": "<p>More Information text</p>"
+},
+{
+"label" : "Button Url",
+"type": "text",
+"id": "button_url"
+
+}
+],
+"blocks": [
+{
+"type": "text",
+"name": {
+"en": "About information"
+},
+"settings": [
+{
+"label": {
+"en": "Title"
+},
+"id": "title",
+"type": "text"
+},
+{
+"label": {
+"en": "Image"
+},
+"id": "image",
+"type": "image_picker"
+},
+{
+"type": "select",
+"id": "img_float",
+"label": "Image float",
+"options": [
+{
+
+"value": "left",
+"label": "Left"
+},
+{
+
+"value": "right",
+"label": "Right"
+}
+],
+"default": "right",
+"info": "text"
+},
+{
+"label": {
+"en": "Information"
+},
+"id": "text",
+"type": "richtext"
+}
+]
+}
+]
+}
+{% endschema %}

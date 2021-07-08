@@ -1,0 +1,74 @@
+<div class="breadcrumbs">
+  <div class="container">
+    <ul>
+      <li><a href="index.html">Головна</a></li>
+      <li>Догляд за білизною</li>
+    </ul>
+  </div>
+</div>
+<div class="content">
+  <div class="container">
+    <div class="title text-center">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="subtitle text-center">{{ page.content }}</div>
+    <div class="text">
+      <img src="{{ section.settings.image | img_url: 'master' }}" alt="">
+      <p><i>{{ section.settings.information}}</i></p>
+
+      {% for block in section.blocks limit: section.blocks.size %}
+        <h2>{{ block.settings.title }}</h2>
+        <p>{{ block.settings.text  }} </p>
+
+      {% endfor %}
+      </div>
+  </div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "Text"
+},
+"settings": [
+
+{
+"label": {
+"en": "Short information"
+},
+"id": "information",
+"type": "text"
+},
+{
+"label": {
+"en": "Image"
+},
+"id": "image",
+"type": "image_picker"
+}
+],
+"blocks": [
+{
+"type": "text",
+"name": {
+"en": "Text"
+},
+"settings": [
+{
+"label": {
+"en": "Title"
+},
+"id": "title",
+"type": "text"
+},
+{
+"label": {
+"en": "Text"
+},
+"id": "text",
+"type": "richtext"
+}
+]
+}
+]
+}
+{% endschema %}

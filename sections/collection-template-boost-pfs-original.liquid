@@ -1,0 +1,570 @@
+
+{% assign pr=view %}
+{% if section.settings.layout == 'grid' %}
+  {%- assign limit = section.settings.grid | times: section.settings.rows -%}
+{% else %}
+  {%- assign limit = 3 -%}
+{% endif %}
+
+{% paginate collection.products by 9 %}
+
+  {% comment %}
+
+<div data-section-id="{{ section.id }}" data-section-type="collection-template">
+  <header class="collection-header">
+    {%- assign is_filter_by_available = false -%}
+    {%- if section.settings.tags_enable and collection.all_tags.size > 0 -%}
+      {%- assign is_filter_by_available = true -%}
+    {%- endif -%}
+
+    {% if section.settings.show_collection_image and collection.image %}
+      <div class="collection-hero">
+        <div class="collection-hero__image ratio-container lazyload js"
+             data-bgset="{% include 'bgset', image: collection.image %}"
+             data-sizes="auto"
+             data-parent-fit="cover"
+             data-image-loading-animation
+        ></div>
+        <noscript>
+          <div class="collection-hero__image" style="background-image: url({{ collection.image | img_url: '2048x600', crop: 'top' }});"></div>
+        </noscript>
+        <div class="collection-hero__title-wrapper">
+          <h1 class="collection-hero__title page-width">
+              <span class="visually-hidden">{{ 'collections.general.collection_label' | t }}: </span>
+              {{ collection.title }}
+          </h1>
+        </div>
+      </div>
+      {% if is_filter_by_available == false and section.settings.sort_enable == false %}
+        <div class="page-width">
+          <span class="filters-toolbar__product-count">{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+        </div>
+      {% endif %}
+      {% if collection.description != blank %}
+        <div class="rte collection-description page-width">
+          {{ collection.description }}
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="page-width">
+        <div class="section-header text-center">
+          <h1>
+              <span class="visually-hidden">{{ 'collections.general.collection_label' | t }}: </span>
+              {{ collection.title }}
+          </h1>
+          {% if collection.description != blank %}
+            <div class="rte">
+              {{ collection.description }}
+            </div>
+          {% endif %}
+          {% if is_filter_by_available == false and section.settings.sort_enable == false %}
+            <span class="filters-toolbar__product-count">{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if is_filter_by_available or section.settings.sort_enable %}
+      <div class="filters-toolbar-wrapper{% if is_filter_by_available %} filters-toolbar--has-filter{% endif %}">
+        <div class="page-width">
+          <div class="filters-toolbar">
+            <div class="filters-toolbar__item-wrapper">
+              {% if section.settings.tags_enable %}
+                {% unless collection.all_tags.size == 0 %}
+                  <div class="filters-toolbar__item-child">
+                    <label class="filters-toolbar__label select-label" for="FilterTags">{{ 'collections.filters.title_tags' | t }}</label>
+                    <div class="filters-toolbar__input-wrapper select-group">
+                      <select class="filters-toolbar__input hidden" name="FilterTags" id="FilterTags" aria-describedby="a11y-refresh-page-message a11y-selection-message" data-select-input>
+                        <option value="{{ collection.url }}">{{ 'collections.filters.all_tags' | t }}</option>
+                        {% for tag in collection.all_tags %}
+                          {%- assign new_url = tag | link_to_tag: tag | split: 'href="' | last | split: '"' | first -%}
+                          <option value="{{ new_url }}"{% if current_tags contains tag %} selected="selected"{% endif %}>{{ tag }}</option>
+                        {% endfor %}
+                      </select>
+                      {% include 'icon-chevron-down' %}
+                    </div>
+                  </div>
+                {% endunless %}
+              {% endif %}
+
+              {% if section.settings.sort_enable %}
+                <div class="filters-toolbar__item-child">
+                  {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                  <label class="filters-toolbar__label select-label" for="SortBy">{{ 'collections.sorting.title' | t }}</label>
+                  <div class="filters-toolbar__input-wrapper select-group">
+                    <select name="sort_by" id="SortBy"
+                      class="filters-toolbar__input hidden"
+                      aria-describedby="a11y-refresh-page-message a11y-selection-message"
+                      data-default-sortby="{{ collection.default_sort_by }}"
+                      data-select-input
+                    >
+                      {%- for option in collection.sort_options -%}
+                        <option value="{{ option.value }}" {% if option.value == sort_by %}selected="selected"{% endif %}>{{ option.name }}</option>
+                      {%- endfor -%}
+                    </select>
+                    {% include 'icon-chevron-down' %}
+                  </div>
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="filters-toolbar__item filters-toolbar__item--count">
+              <span class="filters-toolbar__product-count">{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </header>
+
+  <div class="page-width" id="Collection">
+    {% if section.settings.layout == 'grid' %}
+      {% case section.settings.grid %}
+      {% when 2 %}
+        {%- assign grid_item_width = 'medium-up--one-half' -%}
+      {% when 3 %}
+        {%- assign grid_item_width = 'small--one-half medium-up--one-third' -%}
+      {% when 4 %}
+        {%- assign grid_item_width = 'small--one-half medium-up--one-quarter' -%}
+      {% when 5 %}
+        {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
+      {% endcase %}
+
+      <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
+        {% for product in collection.products %}
+          <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+            {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
+          </li>
+        {% else %}
+          {% comment %}
+          Add default products to help with onboarding for collections/all only.
+
+          The onboarding styles and products are only loaded if the
+          store has no products.
+          {% endcomment %}
+          {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0 %}
+            <li class="grid__item">
+              <div class="grid grid--uniform">
+                {% for i in (1..limit) %}
+                  <div class="grid__item {{ grid_item_width }}">
+                    <div class="grid-view-item">
+                      <a href="#" class="grid-view-item__link">
+                        <div class="grid-view-item__image">
+                          {% capture current %}{% cycle 1, 2, 3, 4, 5, 6 %}{% endcapture %}
+                          {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                        </div>
+                        <div class="h4 grid-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                        <div class="grid-view-item__meta">
+                          <span class="product-price__price">$19.99</span>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </li>
+          {% else %}
+            {%- assign is_empty_collection = true -%}
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% else %}
+      <ul class="list-view-items">
+        {% for product in collection.products %}
+          <li class="list-view-item">
+            {% include 'product-card-list', product: product, show_vendor: section.settings.show_vendor %}
+          </li>
+        {% else %}
+
+          {% comment %}
+          Add default products to help with onboarding for collections/all only.
+
+          The onboarding styles and products are only loaded if the
+          store has no products.
+          {% endcomment %}
+          {% if collection.handle == 'all' and collection.all_vendors.size == 0 and collection.all_types.size == 0%}
+            {% for i in (1..4) %}
+              <li class="list-view-item">
+                <a href="#" class="list-view-item__link">
+                  <div class="list-view-item__image-column">
+                    <div class="list-view-item__image-wrapper">
+                      <div class="list-view-item__image">
+                        {% capture current %}{% cycle 1, 2, 3, 4 %}{% endcapture %}
+                        {{ 'product-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="list-view-item__title-column">
+                    <div class="list-view-item__title">{{ 'homepage.onboarding.product_title' | t }}</div>
+                  </div>
+
+                  <div class="list-view-item__price-column">
+                    <span class="product-price__price">$19.99</span>
+                  </div>
+                </a>
+              </li>
+            {% endfor %}
+          {% else %}
+            {%- assign is_empty_collection = true -%}
+          {% endif %}
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if is_empty_collection %}
+      <div class="grid__item small--text-center">
+        <p class="text-center">{{ 'collections.general.no_matches' | t }}</p>
+      </div>
+    {% endif %}
+
+    {%- if paginate.pages > 1 -%}
+      {% include 'pagination', paginate: paginate %}
+    {%- endif -%}
+  </div>
+</div>
+
+{%endcomment%}
+
+
+
+  <div class="content">
+    <div class="container-fluid">
+      <div class="catalog">
+        <div class="title text-center">
+          <h1>{{ collection.title }}</h1>
+        </div>
+        <div class="subtitle text-center">{{ collection.description }}</div>
+
+        <div class="catalog-section">
+          <aside class="catalog-filter">
+            <div class="catalog-filter__inner">
+              {% if section.settings.show_tag_filtr == true %}
+              <div class="catalog-filter__title">Фільтр</div>
+              <div class="catalog-filter__head">
+
+                <div class="catalog-filter__result">
+                  {% if current_tags != blank %}
+                    Фільтp:  {{ current_tags }}
+                  {% endif %}
+
+                </div>
+                <div class="catalog-filter__reset">
+
+                  <a  href="/collections/{{ collection.handle }}{% if collection.sort_by %}?sort_by={{ collection.sort_by }}{% endif %}">Очистити фільтр</a>
+                </div>
+
+
+              </div>
+
+
+              <div class="catalog-filter__list">
+
+
+
+                <div class="catalog-filter__box">
+                  <div class="catalog-filter__box-head js-catalog-filter-box-toggle">По тегам<span class="icon icon-i-arr-down"></span></div>
+                  <div class="catalog-filter__box-body">
+                    <ul class="subnav clearfix">
+                      <li{% unless current_tags %} class="active"{% endunless %}>
+                        {% if collection.handle %}
+                          <a href="/collections/{{ collection.handle }}{% if collection.sort_by %}?sort_by={{ collection.sort_by }}{% endif %}">Bce</a>
+                        {% elsif collection.current_type %}
+                          <a href="{{ collection.current_type | url_for_type | sort_by: collection.sort_by }}">All</a>
+                        {% elsif collection.current_vendor %}
+                          <a href="{{ collection.current_vendor | url_for_vendor | sort_by: collection.sort_by }}">All</a>
+                        {% endif %}
+                      </li>
+                      {% for tag in collection.all_tags %}
+
+                        {% assign products_count = 0 %}
+                        {% for product in collection.all_products %}
+                          {% if product.tags contains tag %}
+                            {% assign products_count = products_count | plus: 1 %}
+                          {% endif %}
+                        {% endfor %}
+
+
+
+                        {% if current_tags contains tag %}
+                          <li class="active">
+                            {{ tag | link_to_remove_tag: tag }}
+                            ({{ products_count }})
+                          </li>
+                        {% else %}
+                          <li>
+                            {{ tag | link_to_tag: tag }}
+                            ({{ products_count }})
+                          </li>
+
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+                {% comment %}
+                <div class="catalog-filter__box">
+                  <div class="catalog-filter__box-head js-catalog-filter-box-toggle">По vendor<span class="icon icon-i-arr-down"></span></div>
+                  <div class="catalog-filter__box-body">
+                    <ul class="subnav clearfix">
+                      {% for product_vendor in collection.all_vendors %}
+                        <li>
+
+                          {% assign products_count = 0 %}
+                          {% for product in collection.products %}
+                            {% if product.vendor contains product_vendor %}
+                              {% assign products_count = products_count | plus: 1 %}
+                            {% endif %}
+                          {% endfor %}
+
+                          {% if current_tags contains product_vendor %}
+                            <a class="active" href="{{ collection.url }}">{{ product_vendor }} ({{ products_count }})</a>
+                          {% else %}
+                            <a href="{{ collection.url }}/{{ product_vendor | handle }}">{{ product_vendor }} ({{ products_count }})</a>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+
+                    </ul>
+                  </div>
+                </div>
+{%endcomment%}
+              </div>
+              <div class="catalog-filter__close js-catalog-filter-close">
+                <span class="icon icon-close"></span>
+              </div>
+              {% endif %}
+            </div>
+          </aside>
+          <div class="catalog-content">
+            <div class="catalog-sort">
+              <div class="row align-items-center">
+                <div class="col-md-auto">
+                  <div class="catalog-sort__box">
+                    <div class="catalog-sort__box-title">Вигляд моделі: ззаду</div>
+                    <div class="catalog-sort__box-body">
+                      <div class="btn-switch">
+                        {% assign switch = false %}
+                        <input type="checkbox" id="check" name="switchview">
+                        <input type="checkbox" id="switchView" name="switchview">
+                        <label for="switchView"></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-auto ml-lg-auto">
+                  <div class="d-sm-flex align-items-sm-center ">
+                    {% if section.settings.show_filtr == true %}
+                    <div class="catalog-sort__box sort-type">
+                      {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                      <div class="catalog-sort__box-title">Сортувати по:</div>
+                      <div class="catalog-sort__box-body">
+
+                        <select  name="SortBy" id="SortBy" >
+                          {% for option in collection.sort_options %}
+                            <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+                          {% endfor %}
+                        </select>
+
+
+
+                      </div>
+
+                    </div>
+                    {% endif %}
+
+                    {{ template }}
+
+                    {% if section.settings.show_grid == true %}
+                    <div class="catalog-sort__box d-none d-xl-flex">
+                      <div class="catalog-sort__box-title">Показати по:</div>
+                      <div class="catalog-sort__box-body">
+                        <div class="catalog-sort__grid">
+                          <ul>
+                            <li {% if template.suffix == "3" or template.suffix == blank  %}class="active"{% endif %}  ><a href="{{collection.url}}?view=3 ">3</a></li>
+                            <li {% if template.suffix == "4" %}class="active"{% endif %}><a href="{{collection.url}}?view=4">4</a></li>
+                            <li {% if template.suffix == "6" %}class="active"{% endif %} ><a href="{{collection.url}}?view=6">6</a></li>
+
+
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% if section.settings.show_limit_pagination == true %}
+                    <div class="catalog-sort__box">
+                      {% comment %}
+                      <div class="clearfix filter">
+
+                        {% assign s="0" %}
+                        <p>Browse by tag:</p>
+                        <select class="test">
+                          <option value="12" {% if s contains value %}selected{% endif %}  >12</option>
+                          <option value="24" {% if s contains value %}selected{% endif %} >24</option>
+                          <option value="36" {% if s contains value %}selected{% endif %} >36</option>
+                          <option value="48" {% if s contains value %}selected{% endif %} >48</option>
+
+                        </select>
+                      </div>
+                        {% endcomment%}
+                      <div class="catalog-sort__box-title">Товарів сторінці</div>
+                      <div class="catalog-sort__box-body">
+                        <select class="js-select-xs">
+                          <option value="12" {% if s contains value %}selected{% endif %}  >12</option>
+                          <option value="24" {% if s contains value %}selected{% endif %} >24</option>
+                          <option value="36" {% if s contains value %}selected{% endif %} >36</option>
+                          <option value="48" {% if s contains value %}selected{% endif %} >48</option>
+                        </select>
+                      </div>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="col-sm-auto d-flex d-lg-none ml-auto">
+                  <div class="catalog-filter__toggle">
+                    <button class="btn btn-black js-catalog-filter-toggle"><span class="icon icon-i-settings"></span>Фільтр</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="catalog-list">
+              <div class="row">
+
+                {% assign product_grid= template.suffix   %}
+                {% for product in collection.products %}
+
+                  {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor,product_grid:product_grid %}
+
+                {% endfor %}
+
+
+
+
+
+
+
+              </div>
+            </div>
+            {% if paginate.pages > 1 %}
+              {% include 'pagination', paginate: paginate %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endpaginate %}
+<script>
+  // Save existing sort parameters
+  Shopify.queryParams = {};
+  if(location.search.length) {
+    for(var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+      aKeyValue = aCouples[i].split('=');
+      if (aKeyValue.length > 1) {
+        Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+      }
+    }
+  }
+
+  // Add existing sort parameters to current URL
+  document.querySelector('#SortBy').addEventListener('change', function(e) {
+    var value = e.currentTarget.value;
+    Shopify.queryParams.sort_by = value;
+    location.search = new URLSearchParams(Shopify.queryParams).toString();
+  });
+</script>
+
+<script>
+  /* Product Tag Filters - Good for any number of filters on any type of collection pages */
+  const collFilters = document.querySelectorAll('.test');
+
+  if (collFilters.length > 0) {
+    collFilters.forEach((collFilter) => {
+      collFilter.addEventListener('change', function(){
+
+        var newTags = [];
+        collFilters.forEach((collFilter) => {
+          for(var i = 0; i <= collFilter.length-1; i++){
+            if(collFilter[i].selected == true && collFilter[i].value != "") {
+              newTags.push(collFilter[i].value);
+            }
+          }
+        });
+
+        if (newTags.length) {
+          var query = newTags.join('+');
+          window.location.href = '/collections/{{ collection.handle }}/' + query;
+        }
+        else {
+          {% if collection.handle %}
+          window.location.href = '/collections/{{ collection.handle }}';
+          {% elsif collection.products.first.type == collection.title %}
+          window.location.href = '{{ collection.title | url_for_type }}';
+          {% elsif collection.products.first.vendor == collection.title %}
+          window.location.href = '{{ collection.title | url_for_vendor }}';
+          {% endif %}
+
+        }
+      });
+    });
+  }
+</script>
+<script>
+ var s= document.querySelectorAll('#check');
+ console.log(s);
+
+
+</script>
+
+
+{% schema %}
+{
+"name": {
+
+"en": "Collection pages"
+},
+"settings": [
+
+{
+"type": "checkbox",
+"id": "show_tag_filtr",
+"label": {
+
+"en": "Show tag filter"
+},
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_filtr",
+"label": {
+
+"en": "Show filter"
+},
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_grid",
+"label": {
+
+"en": "Show check product grid"
+},
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_limit_pagination",
+"label": {
+
+"en": "Show check limit pagination"
+},
+"default": true
+}
+
+
+]
+}
+{% endschema %}

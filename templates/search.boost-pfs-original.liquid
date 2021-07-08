@@ -1,0 +1,31 @@
+{% paginate search.results by 10 %}
+  <div class="content">
+    <div class="container">
+      <div class="title text-center">
+        <h1>Пошук по каталогу</h1>
+      </div>
+      <div class="search-section">
+
+          <div class="search-section__nothing">
+            <div class="search-section__nothing-count">{{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}</div>
+          </div>
+
+{% if search.results_count > 0 %}
+        <div class="search-section__list search-all">
+          <div class="row">
+            {% for item in search.results %}
+              {% include 'product-card-grid', max_height: max_height, product: item, show_vendor: section.settings.show_vendor %}
+
+            {% endfor %}
+
+          </div>
+        </div>
+{% endif %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endpaginate %}

@@ -1,0 +1,9 @@
+
+<div class="product-card__share">
+    <a href="" class="js-share"><span class="icon icon-i-share"></span>Поділитись</a>
+    <div class="product-card__share-modal">
+        <a target="_blank" href="//www.facebook.com/sharer.php?u={{ shop.url | append: share_permalink }}media={{ share_image | img_url: '1024x1024' }}"><span class="icon icon-social-facebook"></span></a>
+        <a target="_blank" href="//twitter.com/share?text={{ share_title | url_param_escape }}&amp;url={{ shop.url | append: share_permalink }}"><span class="icon icon-social-twitter"></span></a>
+        <a target="_blank"href="//pinterest.com/pin/create/button/?url={{ shop.url | append: share_permalink }}&amp;media={{ share_image | img_url: '1024x1024' }}&amp;description={{ share_title | url_param_escape }}"><span class="icon icon-social-pinterest"></span></a>
+    </div>
+</div>

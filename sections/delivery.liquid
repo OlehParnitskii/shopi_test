@@ -1,0 +1,195 @@
+
+<div class="content">
+  <div class="container">
+    <div class="title text-center">
+      <h1>{{ page.title }}</h1>
+    </div>
+    <div class="subtitle text-center">{{ page.content }}</div>
+    <div class="delivery">
+      <div class="delivery-list">
+        {% unless section.settings.order_title == blank %}
+        <div class="delivery-list__box">
+          <div class="delivery-list__box-head">
+            <div class="delivery-list__box-img">
+
+              {% include "bag" %}
+            </div>
+            <div class="delivery-list__box-title">{{ section.settings.delivery_title }}</div>
+          </div>
+          <div class="delivery-list__box-body">
+            <p>{{ section.settings.delivery_text }}</p>
+          </div>
+        </div>
+        {% endunless %}
+
+          {% unless section.settings.order_title == blank %}
+
+
+        <div class="delivery-list__box">
+          <div class="delivery-list__box-head">
+            <div class="delivery-list__box-img">
+
+              {% include "search-bag" %}
+            </div>
+            <div class="delivery-list__box-title">{{ section.settings.order_title }}</div>
+          </div>
+          <div class="delivery-list__box-body">
+            <p>{{ section.settings.order_text }}</p>
+            </div>
+        </div>
+          {% endunless %}
+        
+        <div class="delivery-list__box">
+          <div class="delivery-list__box-head">
+            <div class="delivery-list__box-img">
+              {% include "credit_card" %}
+            </div>
+            <div class="delivery-list__box-title">Способи оплати</div>
+          </div>
+          <div class="delivery-list__box-body">
+            <div class="row">
+              {%- for block in section.blocks -%}
+              {% if block.type == 'pay' %}
+              <div class="col-lg-6">
+                <img src="{{ block.settings.image | img_url: "master" }}" alt="">
+                <b>{{ block.settings.name }}</b>
+                <p> {{ block.settings.text }}</p>
+              </div>
+              {% endif %}
+              {% endfor %}
+
+            </div>
+          </div>
+        </div>
+        <div class="delivery-list__box">
+          <div class="delivery-list__box-head">
+            <div class="delivery-list__box-img">
+              {% include "delivery" %}
+            </div>
+            <div class="delivery-list__box-title">Способи доставки</div>
+          </div>
+          <div class="delivery-list__box-body">
+            <div class="row">
+              {%- for block in section.blocks -%}
+              {% if block.type == 'delivery' %}
+              <div class="col-lg-6">
+                <img src="{{ block.settings.image | img_url: "master" }}" alt="">
+                <b>{{ block.settings.name }}</b>
+                <p>{{ block.settings.text }}</p>
+                <br/>
+                <p>{{ block.settings.price }}</p>
+              </div>
+              {% endif %}
+              {% endfor %}
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+"name": {
+"en": "Delivery"
+},
+"settings": [
+
+{
+"label": {
+"en": "Information Delivery title"
+},
+"id": "delivery_title",
+"type": "text"
+},
+{
+"label": {
+"en": "Information Delivery text"
+},
+"id": "delivery_text",
+"type": "richtext"
+},
+{
+"label": {
+"en": "Information Order title"
+},
+"id": "order_title",
+"type": "text"
+},
+{
+"label": {
+"en": "Information Order text"
+},
+"id": "order_text",
+"type": "richtext"
+}
+],
+"blocks": [
+{
+"type": "pay",
+"name": {
+"en": "Methods of payment"
+},
+"settings": [
+{
+"label": {
+"en": "Name"
+},
+"id": "name",
+"type": "text"
+},
+{
+"label": {
+"en": "Image"
+},
+"id": "image",
+"type": "image_picker"
+},
+{
+"label": {
+"en": "Information"
+},
+"id": "text",
+"type": "richtext"
+}
+]
+},
+{
+"type": "delivery",
+"name": {
+"en": "Methods of delivery"
+},
+"settings": [
+{
+"label": {
+"en": "Name"
+},
+"id": "name",
+"type": "text"
+},
+{
+"label": {
+"en": "Image"
+},
+"id": "image",
+"type": "image_picker"
+},
+{
+"label": {
+"en": "Information"
+},
+"id": "text",
+"type": "richtext"
+},
+{
+"label": {
+"en": "Price information"
+},
+"id": "price",
+"type": "text"
+}
+]
+}
+]
+}
+{% endschema %}
